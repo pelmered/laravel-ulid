@@ -5,13 +5,13 @@ on:
   push:
 
 jobs:
-  test-linux:
+  test-linux-and-mysql:
     runs-on: ${{ matrix.os }}
 
     env:
       APP_ENV: ci
       DB_CONNECTION: testing
-      DB_DATABASE: laravel_ulid_ci
+      DB_DATABASE: laravel_ulid_ci_testing
       DB_TESTING_DATABASE: laravel_ulid_ci_testing
 
     services:
@@ -94,7 +94,7 @@ jobs:
     env:
       APP_ENV: ci
       DB_CONNECTION: testing
-      DB_DATABASE: laravel_ulid_ci
+      DB_DATABASE: laravel_ulid_ci_testing
       DB_TESTING_DATABASE: laravel_ulid_ci_testing
 
     services:
