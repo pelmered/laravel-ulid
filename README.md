@@ -8,6 +8,18 @@ This package improves the ULID support in Laravel with the following features:
 - Configurable randomness source
 - Provides a Facade for working with ULIDs
 
+[![Latest Stable Version](https://poser.pugx.org/pelmered/laravel-ulid/v/stable)](https://packagist.org/packages/pelmered/laravel-ulid)
+[![Total Downloads](https://poser.pugx.org/pelmered/laravel-ulid/d/total)](//packagist.org/packages/pelmered/laravel-ulid)
+[![Monthly Downloads](https://poser.pugx.org/pelmered/laravel-ulid/d/monthly)](//packagist.org/packages/pelmered/laravel-ulid)
+[![License](https://poser.pugx.org/pelmered/laravel-ulid/license)](https://packagist.org/packages/pelmered/laravel-ulid)
+
+[![Tests](https://github.com/pelmered/laravel-ulid/actions/workflows/run-tests.yml/badge.svg?branch=main)](https://github.com/pelmered/laravel-ulid/actions/workflows/run-tests.yml)
+[![OtterWise Coverage](https://img.shields.io/endpoint?url=https://otterwise.app/badge/github/pelmered/laravel-ulid)](https://otterwise.app/github/pelmered/laravel-ulid)
+[![OtterWise Type Coverage](https://img.shields.io/endpoint?url=https://otterwise.app/badge/github/pelmered/laravel-ulid/type)](https://otterwise.app/github/pelmered/laravel-ulid)
+
+[![Tested on PHP 8.2 to 8.4](https://img.shields.io/badge/Tested%20on%20PHP-8.2%20|%208.3%20|%208.4-brightgreen.svg?maxAge=2419200)](https://github.com/pelmered/filament-money-field/actions/workflows/tests.yml)
+[![Tested on OS:es Linux, MacOS, Windows](https://img.shields.io/badge/Tested%20on%20lastest%20versions%20of-%20Ubuntu%20|%20MacOS%20|%20Windows-brightgreen.svg?maxAge=2419200)](https://github.com/pelmered/laravel-ulid/actions/workflows/tests.yml)
+
 ## TODO
 
 - [ ] Add tests
