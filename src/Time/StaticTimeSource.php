@@ -15,6 +15,5 @@ readonly class StaticTimeSource implements TimeSourceInterface
         }
 
         return $this->timestamp->getMicrosecond();
-        return $this->timestamp->getTimestamp();
     }
 }

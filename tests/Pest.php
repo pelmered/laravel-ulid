@@ -2,6 +2,7 @@
 
 namespace Pelmered\LaravelUlid\Tests;
 
+use Illuminate\Support\Facades\Schema;
 use Workbench\App\Models\User;
 
 /*
@@ -48,4 +49,40 @@ expect()->extend('toBeOne', function () {
 function user(): User
 {
     return User::factory()->create();
+}
+
+
+
+function checkColumnSQLite(string $tableName, string $columnName): void
+{
+    expect(Schema::hasColumn($tableName, $columnName))->toBeTrue();
+    expect(Schema::getColumnType($tableName, $columnName, true))->toBe('varchar');
+
+    $index = Schema::getIndexes($tableName)[1];
+    expect($index['columns'][0])->toBe($columnName);
+    expect($index['unique'])->toBeTrue();
+    expect($index['primary'])->toBeTrue();
+}
+
+function checkColumnMySQL(string $tableName, string $columnName, $length = 28): void
+{
+    expect(Schema::hasColumn($tableName, $columnName))->toBeTrue();
+    expect(Schema::getColumnType($tableName, $columnName, true))->toBe('char(28)');
+
+    $column = Schema::getColumns($tableName)[0];
+
+    expect($column['name'])->toBe($columnName);
+    expect($column['type'])->toBe('char('.$length.')');
+    expect($column['nullable'])->toBeFalse();
+    expect($column['name'])->toBe($columnName);
+    expect($column['default'])->toBeNull();
+    expect($column['auto_increment'])->toBeFalse();
+
+    $index = Schema::getIndexes($tableName)[0];
+
+    expect($index['name'])->toBe('primary');
+    expect($index['columns'][0])->toBe($columnName);
+    expect($index['type'])->toBe('btree');
+    expect($index['unique'])->toBeTrue();
+    expect($index['primary'])->toBeTrue();
 }
