@@ -13,7 +13,7 @@ inputs:
   composer-stability:
     description: '.'
     required: false
-    default: 'dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo'
+    default: 'prefer-stable'
   exclude-groups:
     description: 'The test groups you want to exclude.'
     required: false
