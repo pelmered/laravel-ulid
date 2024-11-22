@@ -38,9 +38,9 @@ Add the interface `Ulidable` and the trait `HasUlid` to your model.
 ```php
 
 use Pelmered\LaravelUlid\LaravelUlidServiceProvider;
-class User extends Authenticatable implements Ulidable
+class Post extends Model implements Ulidable
 {
-    use HasFactory, Notifiable, HasUlid;
+    use HasUlid;
 
     //...
 }
@@ -49,17 +49,18 @@ class User extends Authenticatable implements Ulidable
 ## Configuration
 
 You can configure the ULID prefix, time length and random length in the model.
+
 ```php
 
-use Pelmered\LaravelUlid\LaravelUlidServiceProvider;
-class User extends Authenticatable implements Ulidable
+use Pelmered\LaravelUlid\LaravelUlidServiceProvider;use Pelmered\LaravelUlid\Ulid;
+class Post extends Model implements Ulidable
 {
-    use HasFactory, Notifiable, HasUlid;
+    use HasUlid;
 
-    protected string $ulidPrefix = 'u_';
-
+    protected string $ulidPrefix = 'p_';
     protected int $ulidTimeLength = 10;
     protected int $ulidRandomLength = 16;
+    protected string $ulidOptions = Ulid::OPTION_UPPERCASE;
 
     //...
 }
