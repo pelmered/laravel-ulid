@@ -21,11 +21,6 @@ trait HasUlid
         //return Ulid::fromModel($this);
     }
 
-    protected function isValidUniqueId($ulid): bool
-    {
-        return $this->isValidUlid($ulid);
-    }
-
     public static function find(string|Arrayable|array $value, array|string $columns = ['*']): ?self
     {
         if ($value instanceof static) {
@@ -97,17 +92,6 @@ trait HasUlid
         return static::idColumn();
     }
 
-    public function getIncrementing(): false
-    {
-        return false;
-    }
-
-    public function getKeyType(): string
-    {
-        return 'string';
-    }
-
-
     public function getUlidTimeLength(): int
     {
         if (property_exists($this, 'ulidTimeLength')) {
@@ -135,19 +119,6 @@ trait HasUlid
     {
         return [];
     }
-
-    /*
-    protected static function bootHasUlid(): void
-    {
-        static::saving(static function (self $model): void {
-            if (! $model->{$model->getKeyName()}) {
-                $model->{$model->getKeyName()} = $model->generateUlid();
-            }
-        });
-    }
-    */
-
-
 
     public function getCreatedAt(): Carbon
     {
