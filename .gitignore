@@ -1,1 +1,8 @@
-/vendor/
+
+/vendor
+.phpunit.cache/
+coverage.xml
+composer.lock
+/reports
+
+/tests/cache
