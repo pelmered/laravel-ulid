@@ -77,15 +77,19 @@ runs:
 
     - name: Install dependencies
       run: composer update --${{ matrix.composer-stability }} --prefer-dist --no-interaction
+      shell: bash
 
     - name: Execute tests
       run: vendor/bin/pest
+      shell: bash
       if: inputs.coverage == 'none' && inputs.exclude-groups == 'false'
 
     - name: Execute tests
       run: vendor/bin/pest --exclude-group=${{ inputs.exclude-groups }}
+      shell: bash
       if: inputs.coverage == 'none' && inputs.exclude-groups != 'false'
 
     - name: Execute tests with coverage
       run: vendor/bin/pest --coverage-clover=build/logs/clover.xml
+      shell: bash
       if: inputs.coverage != 'none'
