@@ -1,0 +1,26 @@
+name: Code style
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  phplint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Laravel Pint
+        uses: aglipanci/laravel-pint-action@latest
+        with:
+          verboseMode: true
+          configPath: ./pint.json
+          onlyDirty: true
+
+      - name: Commit linted files
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Fixes coding style"
