@@ -28,8 +28,44 @@ This package improves the ULID support in Laravel with the following features:
 - [ ] Add license
 - [ ] Add badges
 
+## Installation
+```bash
+composer require pelmered/laravel-ulid
+```
+## Setup
 
+Add the interface `Ulidable` and the trait `HasUlid` to your model.
+```php
 
+use Pelmered\LaravelUlid\LaravelUlidServiceProvider;
+class User extends Authenticatable implements Ulidable
+{
+    use HasFactory, Notifiable, HasUlid;
+
+    //...
+}
+```
+
+## Configuration
+
+You can configure the ULID prefix, time length and random length in the model.
+```php
+
+use Pelmered\LaravelUlid\LaravelUlidServiceProvider;
+class User extends Authenticatable implements Ulidable
+{
+    use HasFactory, Notifiable, HasUlid;
+
+    protected string $ulidPrefix = 'u_';
+
+    protected int $ulidTimeLength = 10;
+    protected int $ulidRandomLength = 16;
+
+    //...
+}
+```
+You probably shouldn't touch the time length unless you know what you are doing.\
+The Random part could be optimized based on your needs. A low traffic application could probably use a shorter random part to optimize storage space and performance.
 
 ## Running tests
 
@@ -38,7 +74,7 @@ Run the test with `vendor/bin/pest` or `composer test`.
 The test suite has some tests that require a MySQL database.
 To run these tests, you need to create a `.env` file in the root of the project with the following contents,
 adjusted for your setup:
-```
+```dotenv
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=laravel_ulid_testing
