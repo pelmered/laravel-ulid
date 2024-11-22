@@ -1,17 +1,17 @@
-name: run-tests
+name: setup-and-run-tests
 
 on:
   workflow_dispatch:
   push:
 
 jobs:
-  test:
+  test-linux-and-mysql:
     runs-on: ${{ matrix.os }}
 
     env:
       APP_ENV: ci
       DB_CONNECTION: testing
-      DB_DATABASE: laravel_ulid_ci
+      DB_DATABASE: laravel_ulid_ci_testing
       DB_TESTING_DATABASE: laravel_ulid_ci_testing
 
     services:
@@ -25,11 +25,10 @@ jobs:
         ports: [ "3306:3306" ]
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
-
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest]
         php: [8.3, 8.4]
         stability: [prefer-lowest, prefer-stable]
 
@@ -38,19 +37,64 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+
+      - name: Setup environment, install dependencies, and run tests
+        uses: ./.github/actions/setup-and-run-tests
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
-          coverage: pcov
-      - name: Install dependencies
-        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction
-      - name: Execute tests
-        run: vendor/bin/pest
+          composer-stability: ${{ matrix.stability }}
+          coverage: 'none'
+          exclude-groups: 'mysql'
+
+  test-macos-and-windows:
+    runs-on: ${{ matrix.os }}
+
+    env:
+      APP_ENV: ci
+      DB_CONNECTION: testing
+      DB_DATABASE: laravel_ulid_ci
+      DB_TESTING_DATABASE: laravel_ulid_ci_testing
+
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [windows-latest, macos-latest]
+        php: [8.3, 8.4]
+        stability: [prefer-lowest, prefer-stable]
+
+    name: P${{ matrix.php }} - ${{ matrix.stability }} - ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup environment, install dependencies, and run tests
+        uses: ./.github/actions/setup-and-run-tests
+        with:
+          php-version: ${{ matrix.php }}
+          composer-stability: ${{ matrix.stability }}
+          coverage: 'none'
+          exclude-groups: 'mysql'
 
   report-metrics:
     runs-on: ubuntu-latest
+
+    env:
+      APP_ENV: ci
+      DB_CONNECTION: testing
+      DB_DATABASE: laravel_ulid_ci_testing
+      DB_TESTING_DATABASE: laravel_ulid_ci_testing
+
+    services:
+      # Label used to access the service container
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_DATABASE: laravel_ulid_ci_testing
+        ports: [ "3306:3306" ]
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Checkout code
@@ -58,16 +102,13 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - name: Setup environment, install dependencies, and run tests
+        uses: ./.github/actions/setup-and-run-tests
         with:
-          php-version: 8.3
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
-          coverage: pcov
-      - name: Install dependencies
-        run: composer update --prefer-stable --prefer-dist --no-interaction
-      - name: Execute tests
-        run: vendor/bin/pest --coverage-clover=build/logs/clover.xml
+          php-version: 8.4
+          composer-stability: 'prefer-stable'
+          coverage: 'pcov'
+
       - name: Execute type coverage tests
         run: vendor/bin/pest --type-coverage --type-coverage-json=build/logs/pest-coverage.json
 
