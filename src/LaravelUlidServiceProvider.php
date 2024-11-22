@@ -10,51 +10,31 @@ class LaravelUlidServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-
         $this->app->bind('ulid', function(Application $app) {
-            //return new Ulid();
             return new UlidService();
         });
 
-        //ß$this->app->bind('ulid', new UlidService() );
+        Blueprint::macro('modelUlid', function (string $column = 'ulid', Ulidable|string $model = null) {
 
-        /*
-        $this->app->bind('ulid', UlidService::class);
-        $loader = AliasLoader::getInstance();
-        $loader->alias('LaravelIntervals', JoaoBrandao\LaravelIntervals\Facades\LaravelIntervals::class);
-        */
+            if (is_string($model)) {
+                $model = new $model;
+            }
 
-        Blueprint::macro('ulid', function (string $column = 'ulid', int $length = 26, Ulidable $model = null) {
-
-            $length = $model ? $model->getUlidLength() : $length;
+            $length = $model ? $model->getUlidLength() : 26;
 
             /** @var Blueprint $this */
             return $this->char($column, $length);
-
-            dd($this, $column, $length);
-
-
         });
         /*
-    public function ulid($column = 'ulid', $length = 26)
-    {
-        return $this->char($column, $length);
-    }
-         */
-
-
-        /*
         $this->publishes([
-            __DIR__.'/../config/courier.php' => config_path('courier.php'),
+            __DIR__.'/../config/ulid.php' => config_path('ulid.php'),
         ]);
-        $this->loadTranslationsFrom(__DIR__.'/../lang', 'courier');
-        */
     }
     public function register(): void
     {
         /*
         $this->mergeConfigFrom(
-            __DIR__.'/../config/courier.php', 'courier'
+            __DIR__.'/../config/ulid.php', 'ulid'
         );
         */
     }
