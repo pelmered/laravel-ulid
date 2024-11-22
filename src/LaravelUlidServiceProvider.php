@@ -25,17 +25,15 @@ class LaravelUlidServiceProvider extends ServiceProvider
             /** @var Blueprint $this */
             return $this->char($column, $length);
         });
-        /*
+
         $this->publishes([
             __DIR__.'/../config/ulid.php' => config_path('ulid.php'),
         ]);
     }
     public function register(): void
     {
-        /*
         $this->mergeConfigFrom(
             __DIR__.'/../config/ulid.php', 'ulid'
         );
-        */
     }
 }
