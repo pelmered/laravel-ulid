@@ -18,7 +18,11 @@ trait HasUlid
     public function newUniqueId(): string
     {
         return UlidService::fromModel($this);
-        //return Ulid::fromModel($this);
+    }
+
+    protected function isValidUniqueId($ulid): bool
+    {
+        return UlidService::isValidUlid($ulid, $this);
     }
 
     public static function find(string|Arrayable|array $value, array|string $columns = ['*']): ?self
@@ -29,7 +33,6 @@ trait HasUlid
 
         if (is_array($value) || $value instanceof Arrayable) {
             return static::findMany($value, $columns);
-            //return (new static())->findMany($value, $columns);
         }
 
         return static::findByUlid($value, $columns);

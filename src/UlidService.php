@@ -48,7 +48,7 @@ class UlidService
     }
     */
 
-    public function isValidUlid(string $ulid, Ulidable $model): bool
+    public static function isValidUlid(string $ulid, Ulidable $model): bool
     {
         $prefix       = $model->getUlidPrefix();
         if (strlen($ulid) !== $model->getUlidLength()) {
