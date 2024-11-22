@@ -11,7 +11,7 @@ interface Ulidable
 
     public function getCreatedAt(): ?Carbon;
 
-    public function isValidUlid(string $ulid): bool;
+    public function isValidUniqueId(string $ulid): bool;
 
     public function getUlidTimeLength(): int;
 
