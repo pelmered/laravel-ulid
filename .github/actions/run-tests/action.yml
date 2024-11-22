@@ -76,7 +76,7 @@ runs:
         extensions: ${{ inputs.php-extensions }}
 
     - name: Install dependencies
-      run: composer update --${{ matrix.composer-stability }} --prefer-dist --no-interaction
+      run: composer update --${{ inputs.composer-stability }} --prefer-dist --no-interaction
       shell: bash
 
     - name: Execute tests
