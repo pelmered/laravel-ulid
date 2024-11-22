@@ -1,4 +1,4 @@
-name: run-tests
+name: setup-and-run-tests
 
 on:
   workflow_dispatch:
@@ -38,8 +38,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup environment and install dependencies
-        uses: ./.github/actions/run-tests
+      - name: Setup environment, install dependencies, and run tests
+        uses: ./.github/actions/setup-and-run-tests
         with:
           php-version: ${{ matrix.php }}
           composer-stability: ${{ matrix.stability }}
@@ -68,25 +68,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup environment and install dependencies
-        uses: ./.github/actions/run-tests
+      - name: Setup environment, install dependencies, and run tests
+        uses: ./.github/actions/setup-and-run-tests
         with:
           php-version: ${{ matrix.php }}
           composer-stability: ${{ matrix.stability }}
           coverage: 'none'
           exclude-groups: 'mysql'
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
-
-      - name: Install dependencies
-        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction
-
-      - name: Execute tests
-        run: vendor/bin/pest --exclude-group=mysql
 
   report-metrics:
     runs-on: ubuntu-latest
@@ -114,8 +102,8 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Setup environment and install dependencies
-        uses: ./.github/actions/run-tests
+      - name: Setup environment, install dependencies, and run tests
+        uses: ./.github/actions/setup-and-run-tests
         with:
           php-version: 8.4
           composer-stability: 'prefer-stable'
