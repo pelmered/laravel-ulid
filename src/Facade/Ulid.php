@@ -1,4 +1,5 @@
 <?php
+
 namespace Pelmered\LaravelUlid\Facade;
 
 use Illuminate\Support\Facades\Facade;

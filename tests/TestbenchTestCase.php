@@ -2,37 +2,28 @@
 
 namespace Pelmered\LaravelUlid\Tests;
 
-use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
-use BladeUI\Icons\BladeIconsServiceProvider;
-use Filament\FilamentServiceProvider;
-use Filament\Forms\FormsServiceProvider;
-use Filament\Support\SupportServiceProvider;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Foundation\Application;
-use Livewire\LivewireServiceProvider;
+use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\Attributes\WithMigration;
 use Orchestra\Testbench\Concerns\WithWorkbench;
-use Illuminate\Contracts\Config\Repository;
-use Pelmered\FilamentMoneyField\FilamentMoneyFieldServiceProvider;
+use Orchestra\Testbench\TestCase;
+use Pelmered\LaravelUlid\LaravelUlidServiceProvider;
 use PhpStaticAnalysis\Attributes\Param;
 use PhpStaticAnalysis\Attributes\Returns;
-use PhpStaticAnalysis\Attributes\Type;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Workbench\App\Providers\CustomFormatterServiceProvider;
 
 #[WithMigration]
-class TestbenchTestCase extends \Orchestra\Testbench\TestCase
+class TestbenchTestCase extends TestCase
 {
-    use WithWorkbench;
-    //use DatabaseTransactions;
     use RefreshDatabase;
+    use WithWorkbench;
 
     protected function getPackageProviders($app): array
     {
         return [
-
-            \Pelmered\LaravelUlid\LaravelUlidServiceProvider::class,
+            LaravelUlidServiceProvider::class,
             CustomFormatterServiceProvider::class,
         ];
     }
@@ -42,17 +33,16 @@ class TestbenchTestCase extends \Orchestra\Testbench\TestCase
         tap($app['config'], static function (Repository $config) {
             $config->set('database.default', 'mysql');
             $config->set('database.connections.mysql', [
-                'driver'   => 'mysql',
-                'host'     => config('database.connections.mysql.host', '127.0.0.1'),
-                'port'     => config('database.connections.mysql.port', '3306'),
+                'driver' => 'mysql',
+                'host' => config('database.connections.mysql.host', '127.0.0.1'),
+                'port' => config('database.connections.mysql.port', '3306'),
                 'database' => config('database.connections.mysql.database', 'laravel_ulid_testing'),
                 'username' => config('database.connections.mysql.username', 'root'),
                 'password' => config('database.connections.mysql.password', null),
-                'prefix'   => '',
+                'prefix' => '',
             ]);
 
         });
-        //$app['config']->set('database.default', 'mysql');
     }
 
     protected function usesSqliteConnection($app): void
@@ -60,7 +50,7 @@ class TestbenchTestCase extends \Orchestra\Testbench\TestCase
         $app['config']->set('database.default', 'sqlite');
     }
 
-    #[Param(app: Application::class)] // the second array
+    #[Param(app: Application::class)]
     #[Returns('void')]
     protected function defineEnvironment($app)
     {
@@ -73,9 +63,9 @@ class TestbenchTestCase extends \Orchestra\Testbench\TestCase
         tap($app['config'], static function (Repository $config) {
             $config->set('database.default', 'testbench');
             $config->set('database.connections.testbench', [
-                'driver'   => 'sqlite',
+                'driver' => 'sqlite',
                 'database' => ':memory:',
-                'prefix'   => '',
+                'prefix' => '',
             ]);
 
             // Setup queue database connections.

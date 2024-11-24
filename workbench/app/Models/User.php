@@ -12,7 +12,7 @@ use Workbench\Database\Factories\UserFactory;
 
 class User extends Authenticatable implements Ulidable
 {
-    use HasFactory, Notifiable, HasUlid;
+    use HasFactory, HasUlid, Notifiable;
 
     protected string $ulidPrefix = 'u_';
 
@@ -51,5 +51,4 @@ class User extends Authenticatable implements Ulidable
     {
         return UserFactory::new();
     }
-
 }

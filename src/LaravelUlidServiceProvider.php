@@ -1,4 +1,5 @@
 <?php
+
 namespace Pelmered\LaravelUlid;
 
 use Illuminate\Database\Schema\Blueprint;
@@ -11,14 +12,14 @@ class LaravelUlidServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        $this->app->bind('ulid', function(Application $app) {
-            return new UlidService();
+        $this->app->bind('ulid', function (Application $app) {
+            return new UlidService;
         });
-        $this->app->bind('UlidFormatter', function(Application $app) {
+        $this->app->bind('UlidFormatter', function (Application $app) {
             return new UlidFormatter(config('ulid.formatting_options', []));
         });
 
-        Blueprint::macro('modelUlid', function (string $column = 'ulid', Ulidable|string $model = null) {
+        Blueprint::macro('modelUlid', function (string $column = 'ulid', Ulidable|string|null $model = null) {
 
             if (is_string($model)) {
                 $model = new $model;
@@ -34,6 +35,7 @@ class LaravelUlidServiceProvider extends ServiceProvider
             __DIR__.'/../config/ulid.php' => config_path('ulid.php'),
         ]);
     }
+
     public function register(): void
     {
         $this->mergeConfigFrom(

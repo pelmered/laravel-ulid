@@ -1,11 +1,8 @@
 <?php
 
-
-use Illuminate\Database\Schema\Blueprint;
 use Pelmered\LaravelUlid\Facade\Ulid;
 
-it('formats' , function () {
-
+it('formats', function () {
 
     /*
     Ulid::formatUlidsUsing(function (string $prefix, string $time, string $random): string {
@@ -24,8 +21,6 @@ it('formats' , function () {
 
     dump($ulid);
 
-
     //expect($ulid)->toMatch('/^[a-z0-9]{26}-[0-9]{10}-[a-z0-9]{16}$/');
-
 
 });
