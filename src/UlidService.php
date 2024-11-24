@@ -17,19 +17,22 @@ class UlidService
 
     public const int DEFAULT_RANDOM_LENGTH = 16;
 
-    public function make(?Carbon $createdAt = null, $prefix = '', array $options = []): string
+    public function make(?string $prefix = '', ?Carbon $createdAt = null, ?int $timeLength = null, ?int $randomLength = null): string
     {
+        $prefix ??= '';
         $createdAt ??= Carbon::now();
+        $timeLength ??= $this->getDefaultTimeLength();
+        $randomLength ??= $this->getDefaultRandomLength();
 
-        return (string) (new Ulid(
+        return (new Ulid(
             new UlidTimeEncoder(new StaticTimeSource(
                 $createdAt->getPreciseTimestamp(3)
             )),
             new UlidRandomnessEncoder(new FloatRandomGenerator),
             $prefix,
-            self::DEFAULT_TIME_LENGTH,
-            self::DEFAULT_RANDOM_LENGTH,
-        ));
+            $timeLength,
+            $randomLength,
+        ))->format();
     }
 
     public static function fromModel(Ulidable $model): Ulid

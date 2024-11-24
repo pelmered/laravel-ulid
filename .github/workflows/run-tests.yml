@@ -1,4 +1,4 @@
-name: setup-and-run-tests
+name: run-tests
 
 on:
   workflow_dispatch:

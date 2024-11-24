@@ -1,8 +1,9 @@
 <?php
 
+use Carbon\Carbon;
 use Pelmered\LaravelUlid\Facade\Ulid;
 
-it('formats', function () {
+it('formats', function (?string $prefix, ?int $timeLength, ?int $randomLength) {
 
     /*
     Ulid::formatUlidsUsing(function (string $prefix, string $time, string $random): string {
@@ -16,11 +17,15 @@ it('formats', function () {
     dd($f);
     */
 
-    $ulid = Ulid::make(null, 'prefix_');
+    $ulid = Ulid::make($prefix, Carbon::now(), $timeLength, $randomLength);
+
     expect($ulid)->toBeString();
 
-    dump($ulid);
+    expect($ulid)->toMatchUlidFormat($prefix, $timeLength, $randomLength);
 
-    //expect($ulid)->toMatch('/^[a-z0-9]{26}-[0-9]{10}-[a-z0-9]{16}$/');
-
-});
+})->with([
+    ['prefix_', 10, 10],
+    [null, 10, 16],
+    ['post_', 8, 8],
+    [null, null, null],
+]);

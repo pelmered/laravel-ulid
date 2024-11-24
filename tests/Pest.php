@@ -33,6 +33,13 @@ pest()->extend(TestbenchTestCase::class)->in('Feature', 'Unit');
 expect()->extend('toBeOne', function () {
     return $this->toBe(1);
 });
+expect()->extend('toMatchUlidFormat', function (?string $prefix, ?int $timeLength = 10, ?int $randomLength = 16) {
+    $prefix ??= '';
+    $timeLength ??= 10;
+    $randomLength ??= 16;
+
+    return $this->toMatch('/^'.$prefix.'[A-Z0-9]{'.$timeLength.'}[A-Z0-9]{'.$randomLength.'}$/');
+});
 
 /*
 |--------------------------------------------------------------------------
