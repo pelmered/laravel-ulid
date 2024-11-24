@@ -1,12 +1,12 @@
 <?php
+
 namespace Pelmered\LaravelUlid\Time;
 
 use lewiscowles\core\Concepts\Time\TimeSourceInterface;
 
 readonly class StaticTimeSource implements TimeSourceInterface
 {
-    public function __construct(private \DateTimeInterface|int $timestamp)
-    {}
+    public function __construct(private \DateTimeInterface|int $timestamp) {}
 
     public function getTime(): int
     {

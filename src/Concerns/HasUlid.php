@@ -1,16 +1,15 @@
 <?php
+
 namespace Pelmered\LaravelUlid\Concerns;
 
 use Carbon\Carbon;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Concerns\HasUniqueStringIds;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
-//use Pelmered\LaravelUlid\Facade\Ulid;
-use League\Flysystem\Config;
 use Pelmered\LaravelUlid\UlidService;
-use Pelmered\LaravelUlid\ValueObject\Ulid;
+
+//use Pelmered\LaravelUlid\Facade\Ulid;
 
 trait HasUlid
 {
@@ -43,6 +42,7 @@ trait HasUlid
     {
         return static::findByUlid($id, $columns, $withTrashed);
     }
+
     public static function findByUlid(string $id, array|string $columns = ['*'], bool $withTrashed = false): ?self
     {
         return Cache::remember(
@@ -55,10 +55,10 @@ trait HasUlid
             60,
             static function () use ($withTrashed, $id, $columns) {
                 return self::where(static::idColumn(), '=', $id)
-                           ->when($withTrashed, function ($query) {
-                               return $query->withTrashed();
-                           })
-                           ->first($columns);
+                    ->when($withTrashed, function ($query) {
+                        return $query->withTrashed();
+                    })
+                    ->first($columns);
             }
         );
     }
@@ -78,17 +78,15 @@ trait HasUlid
 
     public static function getTableName(): string
     {
-        return (new static())->getTable();
+        return (new static)->getTable();
     }
 
     /**
      * The name of the column that should be used for the ULID.
-     *
-     * @return string
      */
     public static function idColumn(): string
     {
-        return (new static())->primaryKey ?? 'id';
+        return (new static)->primaryKey ?? 'id';
     }
 
     public function getKeyName(): string
@@ -116,7 +114,7 @@ trait HasUlid
 
     public function getUlidLength(): int
     {
-        return (strlen($this->getUlidPrefix()) + $this->getUlidTimeLength() + $this->getUlidRandomLength());
+        return strlen($this->getUlidPrefix()) + $this->getUlidTimeLength() + $this->getUlidRandomLength();
     }
 
     public function getUlidFormattingOptions(): array

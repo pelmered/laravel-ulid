@@ -1,9 +1,10 @@
 <?php
 
 use Pelmered\LaravelUlid\Facade\Ulid;
+
 use function Pelmered\LaravelUlid\Tests\user;
 
-it('creates ULID from model using facade',  function () {
+it('creates ULID from model using facade', function () {
     $user = user();
 
     Ulid::fromModel($user);

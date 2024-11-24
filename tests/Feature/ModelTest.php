@@ -1,6 +1,7 @@
 <?php
 
 use Pelmered\LaravelUlid\Facade\Ulid;
+
 use function Pelmered\LaravelUlid\Tests\checkColumnSQLite;
 use function Pelmered\LaravelUlid\Tests\user;
 
@@ -8,7 +9,7 @@ test('example', function () {
     expect(true)->toBeTrue();
 });
 
-it('creates user with ULID' , function () {
+it('creates user with ULID', function () {
 
     $user = user();
 

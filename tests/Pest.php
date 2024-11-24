@@ -16,7 +16,6 @@ use Workbench\App\Models\User;
 |
 */
 
-
 pest()->extend(TestbenchTestCase::class)->in('Feature', 'Unit');
 //pest()->extend(PHPUnitTestCase::class)->in('Unit');
 
@@ -50,8 +49,6 @@ function user(): User
 {
     return User::factory()->create();
 }
-
-
 
 function checkColumnSQLite(string $tableName, string $columnName): void
 {

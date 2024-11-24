@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->ulid('id', (new \Workbench\App\Models\User())->getUlidLength())->primary()->change();
+            $table->ulid('id', (new \Workbench\App\Models\User)->getUlidLength())->primary()->change();
         });
     }
 

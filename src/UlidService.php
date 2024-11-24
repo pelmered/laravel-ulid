@@ -1,9 +1,9 @@
 <?php
+
 namespace Pelmered\LaravelUlid;
 
 use Carbon\Carbon;
 use Illuminate\Support\Str;
-use Illuminate\Support\Stringable;
 use lewiscowles\core\Concepts\Random\UlidRandomnessEncoder;
 use lewiscowles\core\Concepts\Time\UlidTimeEncoder;
 use Pelmered\LaravelUlid\Contracts\Ulidable;
@@ -14,6 +14,7 @@ use Pelmered\LaravelUlid\ValueObject\Ulid;
 class UlidService
 {
     public const int DEFAULT_TIME_LENGTH = 10;
+
     public const int DEFAULT_RANDOM_LENGTH = 16;
 
     public function make(?Carbon $createdAt = null, $prefix = '', array $options = []): string
@@ -24,13 +25,12 @@ class UlidService
             new UlidTimeEncoder(new StaticTimeSource(
                 $createdAt->getPreciseTimestamp(3)
             )),
-            new UlidRandomnessEncoder(new FloatRandomGenerator()),
+            new UlidRandomnessEncoder(new FloatRandomGenerator),
             $prefix,
             self::DEFAULT_TIME_LENGTH,
             self::DEFAULT_RANDOM_LENGTH,
         ));
     }
-
 
     public static function fromModel(Ulidable $model): Ulid
     {
@@ -38,7 +38,7 @@ class UlidService
             new UlidTimeEncoder(new StaticTimeSource(
                 $model->getCreatedAt()->getPreciseTimestamp(3)
             )),
-            new UlidRandomnessEncoder(new FloatRandomGenerator()),
+            new UlidRandomnessEncoder(new FloatRandomGenerator),
             $model->getUlidPrefix(),
             $model->getUlidTimeLength(),
             $model->getUlidRandomLength(),
@@ -47,7 +47,7 @@ class UlidService
 
     public static function isValidUlid(string $ulid, ?Ulidable $model = null): bool
     {
-        #TODO: Handle $model = null case
+        //TODO: Handle $model = null case
         $prefix = $model->getUlidPrefix();
         if (strlen($ulid) !== $model->getUlidLength()) {
             return false;
