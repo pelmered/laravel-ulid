@@ -3,7 +3,7 @@ namespace Pelmered\LaravelUlid\Contracts;
 
 use Carbon\Carbon;
 use Illuminate\Support\Str;
-use Pelmered\LaravelUlid\Ulid;
+use Pelmered\LaravelUlid\ValueObject\Ulid;
 
 interface Ulidable
 {

@@ -2,16 +2,24 @@
 
 namespace Pelmered\LaravelUlid\Tests;
 
+use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
+use BladeUI\Icons\BladeIconsServiceProvider;
+use Filament\FilamentServiceProvider;
+use Filament\Forms\FormsServiceProvider;
+use Filament\Support\SupportServiceProvider;
 use Illuminate\Foundation\Application;
+use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\Attributes\WithMigration;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Illuminate\Contracts\Config\Repository;
+use Pelmered\FilamentMoneyField\FilamentMoneyFieldServiceProvider;
 use PhpStaticAnalysis\Attributes\Param;
 use PhpStaticAnalysis\Attributes\Returns;
 use PhpStaticAnalysis\Attributes\Type;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
+use Workbench\App\Providers\CustomFormatterServiceProvider;
 
 #[WithMigration]
 class TestbenchTestCase extends \Orchestra\Testbench\TestCase
@@ -19,6 +27,15 @@ class TestbenchTestCase extends \Orchestra\Testbench\TestCase
     use WithWorkbench;
     //use DatabaseTransactions;
     use RefreshDatabase;
+
+    protected function getPackageProviders($app): array
+    {
+        return [
+
+            \Pelmered\LaravelUlid\LaravelUlidServiceProvider::class,
+            CustomFormatterServiceProvider::class,
+        ];
+    }
 
     protected function usesMySqlConnection($app): void
     {

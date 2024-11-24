@@ -3,20 +3,32 @@ namespace Pelmered\LaravelUlid;
 
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use Illuminate\Support\Stringable;
 use lewiscowles\core\Concepts\Random\UlidRandomnessEncoder;
 use lewiscowles\core\Concepts\Time\UlidTimeEncoder;
 use Pelmered\LaravelUlid\Contracts\Ulidable;
 use Pelmered\LaravelUlid\Randomizer\FloatRandomGenerator;
 use Pelmered\LaravelUlid\Time\StaticTimeSource;
+use Pelmered\LaravelUlid\ValueObject\Ulid;
 
 class UlidService
 {
-    protected function generateUlid(Ulidable $model, ?Carbon $createdAt = null): string
-    {
-        /** @var Carbon $createdAt */
-        $createdAt = $createdAt ?? $model->getCreatedAt() ?? now();
+    public const int DEFAULT_TIME_LENGTH = 10;
+    public const int DEFAULT_RANDOM_LENGTH = 16;
 
-        return self::fromModel($model);
+    public function make(?Carbon $createdAt = null, $prefix = '', array $options = []): string
+    {
+        $createdAt ??= Carbon::now();
+
+        return (string) (new Ulid(
+            new UlidTimeEncoder(new StaticTimeSource(
+                $createdAt->getPreciseTimestamp(3)
+            )),
+            new UlidRandomnessEncoder(new FloatRandomGenerator()),
+            $prefix,
+            self::DEFAULT_TIME_LENGTH,
+            self::DEFAULT_RANDOM_LENGTH,
+        ));
     }
 
 
@@ -30,27 +42,13 @@ class UlidService
             $model->getUlidPrefix(),
             $model->getUlidTimeLength(),
             $model->getUlidRandomLength(),
-            $model->getUlidFormattingOptions(),
         );
     }
 
-    /*
-    public static function fromTimestamp(int $milliseconds, $prefix = '', array $options = []): Ulid
+    public static function isValidUlid(string $ulid, ?Ulidable $model = null): bool
     {
-        return new Ulid(
-            new UlidTimeEncoder(new StaticTimeSource($milliseconds)),
-            new UlidRandomnessEncoder(new FloatRandomGenerator()),
-            $prefix,
-            Ulid::DEFAULT_TIME_LENGTH,
-            Ulid::RANDOM_LENGTH,
-            $options,
-        );
-    }
-    */
-
-    public static function isValidUlid(string $ulid, Ulidable $model): bool
-    {
-        $prefix       = $model->getUlidPrefix();
+        #TODO: Handle $model = null case
+        $prefix = $model->getUlidPrefix();
         if (strlen($ulid) !== $model->getUlidLength()) {
             return false;
         }
@@ -59,6 +57,16 @@ class UlidService
             return false;
         }
 
-        return ! preg_match('/[^abcdefghjkmnpqrstvwxyz0-9]/i', substr($ulid, strlen($model->getUlidPrefix())));
+        return ! preg_match('/[^a-z0-9]/i', substr($ulid, strlen($model->getUlidPrefix())));
+    }
+
+    public function getDefaultTimeLength(): int
+    {
+        return config('ulid.time_length', self::DEFAULT_TIME_LENGTH);
+    }
+
+    public function getDefaultRandomLength(): int
+    {
+        return config('ulid.random_length', self::DEFAULT_RANDOM_LENGTH);
     }
 }
