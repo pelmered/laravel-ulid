@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Concerns\HasUniqueStringIds;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 //use Pelmered\LaravelUlid\Facade\Ulid;
+use League\Flysystem\Config;
 use Pelmered\LaravelUlid\UlidService;
-use Pelmered\LaravelUlid\Ulid;
+use Pelmered\LaravelUlid\ValueObject\Ulid;
 
 trait HasUlid
 {
@@ -17,7 +18,7 @@ trait HasUlid
 
     public function newUniqueId(): string
     {
-        return UlidService::fromModel($this);
+        return (string) UlidService::fromModel($this);
     }
 
     protected function isValidUniqueId($ulid): bool
@@ -81,7 +82,7 @@ trait HasUlid
     }
 
     /**
-     * The name of the column that should be used for the UUID.
+     * The name of the column that should be used for the ULID.
      *
      * @return string
      */
@@ -101,7 +102,7 @@ trait HasUlid
             return (int) $this->ulidTimeLength;
         }
 
-        return Ulid::DEFAULT_TIME_LENGTH;
+        return config('ulid.time_length', UlidService::DEFAULT_TIME_LENGTH);
     }
 
     public function getUlidRandomLength(): int
@@ -110,7 +111,7 @@ trait HasUlid
             return (int) $this->ulidRandomLength;
         }
 
-        return Ulid::DEFAULT_RANDOM_LENGTH;
+        return config('ulid.random_length', UlidService::DEFAULT_RANDOM_LENGTH);
     }
 
     public function getUlidLength(): int

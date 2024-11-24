@@ -1,6 +1,5 @@
 providers:
  - Workbench\App\Providers\WorkbenchServiceProvider
- - Pelmered\LaravelUlid\LaravelUlidServiceProvider
 
 migrations:
   - workbench/database/migrations

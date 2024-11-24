@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Pelmered\LaravelUlid\Contracts\Ulidable;
+use Pelmered\LaravelUlid\Formatter\UlidFormatter;
 
 class LaravelUlidServiceProvider extends ServiceProvider
 {
@@ -12,6 +13,9 @@ class LaravelUlidServiceProvider extends ServiceProvider
     {
         $this->app->bind('ulid', function(Application $app) {
             return new UlidService();
+        });
+        $this->app->bind('UlidFormatter', function(Application $app) {
+            return new UlidFormatter(config('ulid.formatting_options', []));
         });
 
         Blueprint::macro('modelUlid', function (string $column = 'ulid', Ulidable|string $model = null) {
