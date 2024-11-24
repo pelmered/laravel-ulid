@@ -38,11 +38,11 @@ The hyphens also look pretty ugly and do not have any real meaning for a human.
 
 ## TODO
 
-- [ ] Add tests
+- [ ] Add more tests
 - [ ] Add docs
-- [ ] Add changelog
 - [x] ~~Add license~~
 - [x] ~~Add badges~~
+- [] Implement custom formatter support
 
 ## Installation
 ```bash
