@@ -2,6 +2,7 @@
 
 namespace Pelmered\LaravelUlid\Time;
 
+use Carbon\Carbon;
 use lewiscowles\core\Concepts\Time\TimeSourceInterface;
 
 readonly class StaticTimeSource implements TimeSourceInterface
@@ -14,6 +15,8 @@ readonly class StaticTimeSource implements TimeSourceInterface
             return $this->timestamp;
         }
 
-        return $this->timestamp->getMicrosecond();
+        return (int) Carbon::instance($this->timestamp)->getPreciseTimestamp(3);
+        // This needs PHP 8.4
+        //return $this->timestamp->getMicrosecond();
     }
 }

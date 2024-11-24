@@ -4,9 +4,9 @@ namespace Pelmered\LaravelUlid\Formatter;
 
 class UlidFormatter
 {
-    public const string OPTION_LOWERCASE = 'lowercase';
+    public const OPTION_LOWERCASE = 'lowercase';
 
-    public const string OPTION_UPPERCASE = 'uppercase';
+    public const OPTION_UPPERCASE = 'uppercase';
 
     protected $customFormatter;
 
