@@ -1,0 +1,17 @@
+
+includes:
+
+parameters:
+
+    paths:
+        - src
+        - tests
+
+    level: 8
+
+    treatPhpDocTypesAsCertain: false
+
+    ignoreErrors:
+        - '#Unsafe usage of new static#'
+        - identifier: missingType.iterableValue
+
