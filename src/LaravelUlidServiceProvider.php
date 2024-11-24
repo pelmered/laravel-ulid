@@ -25,6 +25,7 @@ class LaravelUlidServiceProvider extends ServiceProvider
                 $model = new $model;
             }
 
+            /** @var Ulidable $model */
             $length = $model ? $model->getUlidLength() : 26;
 
             /** @var Blueprint $this */

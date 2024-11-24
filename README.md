@@ -44,6 +44,9 @@ The hyphens also look pretty ugly and do not have any real meaning for a human.
 - [x] ~~Add badges~~
 - [ ] Implement custom formatter support
 
+## Roadmap
+- [ ] Migration tool for migrating an existing database with numeric or UUIDs to ULIDs. Probably as a separate suggested package.
+
 ## Installation
 ```bash
 composer require pelmered/laravel-ulid
@@ -115,7 +118,9 @@ return new class extends Migration
 ### Facade
 
 ```php
-ULID::make($model);
+ULID::make(); // '1234567890123456789' - Normal ULID
+ULID::make('p_', Carbon::parse('2010-11-12 01:02:03')); // 'u_1234567890123456789' - ULID with prefix 
+ULID::make('p_', 10, 10 ); // 'u_1234567890123456789' - ULID with prefix
 ULID::fromModel($model);
 ULID::isValidUlid('u_1234567890123456789', $model);
 ```
