@@ -3,10 +3,26 @@
 This package improves the ULID support in Laravel with the following features:
 - Configurable prefix
 - Configurable length (both time and random parts)
-- Configurable case
+- Configurable formatting/case
 - Configurable time source
 - Configurable randomness source
 - Provides a Facade for working with ULIDs
+
+## ULIDs - What and why
+
+ULIDs are a compact, time-ordered, globally unique identifier that are used to
+identify resources in a way that is both human-readable and machine-readable.
+
+For a more in-depth technical explanation, see the [ULID specification](https://github.com/ulid/spec)
+
+One of my personal favorite things about ULIDs is that you can double-click on them to select and copy. 
+Try to select and copy these IDs: `u_01ARZ3NDEKTSV4RRFFQ69G5FAVY` and `4f839b45-fcca-495b-b9ed-0e365270b1c3`. 
+The prefixes also makes it immediately clear what kind of ID it is when you see it.
+
+This is great when you are passing IDs around to colleagues or coworkers when debugging or working with support.
+The hyphens also look pretty ugly and do not have any real meaning for a human.
+
+<hr>
 
 [![Latest Stable Version](https://poser.pugx.org/pelmered/laravel-ulid/v/stable)](https://packagist.org/packages/pelmered/laravel-ulid)
 [![Total Downloads](https://poser.pugx.org/pelmered/laravel-ulid/d/total)](//packagist.org/packages/pelmered/laravel-ulid)
@@ -52,7 +68,7 @@ You can configure the ULID prefix, time length and random length in the model.
 
 ```php
 
-use Pelmered\LaravelUlid\LaravelUlidServiceProvider;use Pelmered\LaravelUlid\Ulid;
+use Pelmered\LaravelUlid\LaravelUlidServiceProvider;use Pelmered\LaravelUlid\ValueObject\Ulid;
 class Post extends Model implements Ulidable
 {
     use HasUlid;
@@ -67,6 +83,54 @@ class Post extends Model implements Ulidable
 ```
 You probably shouldn't touch the time length unless you know what you are doing.\
 The Random part could be optimized based on your needs. A low traffic application could probably use a shorter random part to optimize storage space and performance.
+
+## Usage (Work in progress)
+
+
+### Migrations
+
+To create a ULID column in a migration, you can use the `ulid` or `modelULid` methods like this to get the correct length.
+```php
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        // Create a table with an ULID primary key like this:
+        Schema::create('users', function (Blueprint $table) {
+            $table->uLid('id', (new \Workbench\App\Models\User())->getUlidLength())->primary();
+        });
+        // or like this:
+        Schema::create('posts', function (Blueprint $table) {
+            $table->modelULid('id', User::class)->primary();
+        });
+    }
+}
+```
+
+
+
+### Facade
+
+```php
+ULID::make($model);
+ULID::fromModel($model);
+ULID::isValidUlid('u_1234567890123456789', $model);
+```
+### Formatting
+```dotenv
+
+```
+
+### Config
+
+Publish the config file `config/ulid.php` to your project.
+```bash
+php artisan vendor:publish --tag=ulid-config
+```
+
 
 ## Running tests
 
