@@ -10,9 +10,9 @@ use Stringable;
 class Ulid implements Stringable
 {
     public function __construct(
-        protected(set) UlidTimeEncoder $timeEncoder,
-        protected(set) RandomnessEncoderInterface $randomEncoder,
-        protected(set) string $prefix = '',
+        protected UlidTimeEncoder $timeEncoder,
+        protected RandomnessEncoderInterface $randomEncoder,
+        protected string $prefix = '',
         protected int $timeLength = 10,
         protected int $randomLength = 16,
     ) {}
