@@ -42,7 +42,7 @@ The hyphens also look pretty ugly and do not have any real meaning for a human.
 - [ ] Add docs
 - [x] ~~Add license~~
 - [x] ~~Add badges~~
-- [] Implement custom formatter support
+- [ ] Implement custom formatter support
 
 ## Installation
 ```bash
