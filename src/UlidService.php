@@ -7,65 +7,88 @@ use Illuminate\Support\Str;
 use lewiscowles\core\Concepts\Random\UlidRandomnessEncoder;
 use lewiscowles\core\Concepts\Time\UlidTimeEncoder;
 use Pelmered\LaravelUlid\Contracts\Ulidable;
-use Pelmered\LaravelUlid\Randomizer\FloatRandomGenerator;
+use Pelmered\LaravelUlid\Formatter\UlidFormatter;
 use Pelmered\LaravelUlid\Time\StaticTimeSource;
 use Pelmered\LaravelUlid\ValueObject\Ulid;
 
 class UlidService
 {
-    public const int DEFAULT_TIME_LENGTH = 10;
-
     public const int DEFAULT_RANDOM_LENGTH = 16;
 
-    public function make(?string $prefix = '', ?Carbon $createdAt = null, ?int $timeLength = null, ?int $randomLength = null): string
+    public function make(?Carbon $createdAt = null, ?string $prefix = '',  ?int $randomLength = null): string
     {
         $prefix ??= '';
         $createdAt ??= Carbon::now();
-        $timeLength ??= $this->getDefaultTimeLength();
         $randomLength ??= $this->getDefaultRandomLength();
 
-        return (new Ulid(
-            new UlidTimeEncoder(new StaticTimeSource(
-                $createdAt->getPreciseTimestamp(3)
-            )),
-            new UlidRandomnessEncoder(new FloatRandomGenerator),
+        return (new UlidFactory)->generateMonotonicUlid(
+            $createdAt,
             $prefix,
-            $timeLength,
-            $randomLength,
-        ))->format();
+            $randomLength
+        )->format();
     }
 
     public static function fromModel(Ulidable $model): Ulid
     {
-        return new Ulid(
-            new UlidTimeEncoder(new StaticTimeSource(
-                $model->getCreatedAt()->getPreciseTimestamp(3)
-            )),
-            new UlidRandomnessEncoder(new FloatRandomGenerator),
+        return (new UlidFactory())->generateMonotonicUlid(
+            $model->getCreatedAt()->getPreciseTimestamp(3),
             $model->getUlidPrefix(),
-            $model->getUlidTimeLength(),
             $model->getUlidRandomLength(),
         );
     }
 
-    public static function isValidUlid(string $ulid, ?Ulidable $model = null): bool
+    public static function isValidUlid(string $ulid, ?Ulidable $model = null, string $prefix = null): bool
     {
-        //TODO: Handle $model = null case
-        $prefix = $model->getUlidPrefix();
-        if (strlen($ulid) !== $model->getUlidLength()) {
+        if($model) {
+            $prefix = $prefix ?? $model->getUlidPrefix();
+            if ($prefix && ! Str::startsWith($ulid, $prefix)) {
+                // dump('prefix', $ulid);
+                return false;
+            }
+
+            if (strlen($ulid) !== $model->getUlidLength()) {
+                // dump('length', $ulid, strlen($ulid), $model->getUlidLength());
+                return false;
+            }
+        }
+
+        $ulidWithoutPrefix = $prefix ? substr($ulid, strlen($prefix)) : $ulid;
+
+        // Check for invalid characters
+        // Anything except A-Z, 0-9
+        if (preg_match('/[^A-Z0-9]/i', $ulidWithoutPrefix)) {
+            // dump('out of range', $ulidWithoutPrefix);
             return false;
         }
 
-        if (! Str::startsWith($ulid, $prefix)) {
+        // Check for invalid characters ( I, L, O, U )
+        if (preg_match('/[ILOU]/i', $ulidWithoutPrefix)) {
+            // dump('invalid chars', $ulidWithoutPrefix);
             return false;
         }
 
-        return ! preg_match('/[^a-z0-9]/i', substr($ulid, strlen($model->getUlidPrefix())));
+        return true;
     }
 
-    public function getDefaultTimeLength(): int
+    /**
+     * Set a custom formatter for ULIDs
+     *
+     * @param callable $formatter The formatter function
+     * @return void
+     */
+    public function formatUlidsUsing(callable $formatter): void
     {
-        return config('ulid.time_length', self::DEFAULT_TIME_LENGTH);
+        app(UlidFormatter::class)->formatUlidsUsing($formatter);
+    }
+
+    /**
+     * Get the custom formatter if one is set
+     *
+     * @return \Closure|null
+     */
+    public function getCustomFormatter(): ?\Closure
+    {
+        return app(UlidFormatter::class)->getCustomFormatter();
     }
 
     public function getDefaultRandomLength(): int

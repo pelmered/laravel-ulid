@@ -14,12 +14,10 @@ class UlidFormatter
 
     public function format(string $prefix, string $time, string $random): string
     {
-        //TODO: implement custom formatter support
-        /*
-        dump($this->customFormatter);
-        $formatter = $this->getCustomFormatter();
-        dump($formatter);
-        */
+        // If we have a custom formatter, use it
+        if (isset($this->customFormatter) && is_callable($this->customFormatter)) {
+            return call_user_func($this->customFormatter, $prefix, $time, $random);
+        }
 
         $ulid = sprintf('%s%s%s', $prefix, $time, $random);
 

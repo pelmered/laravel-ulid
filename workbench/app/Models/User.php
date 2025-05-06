@@ -22,6 +22,7 @@ class User extends Authenticatable implements Ulidable
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'name',
         'email',
         'password',

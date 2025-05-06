@@ -5,19 +5,23 @@
     "require": {
         "php": "^8.3",
         "lewiscowles/ulid": "^1.3.1",
-        "illuminate/support": "^11.30 | ^12.0",
-        "php-static-analysis/attributes": "^0.3.1",
-        "nesbot/carbon": "*"
+        "illuminate/support": "^11.0|^12.0",
+        "php-static-analysis/attributes": "^0.3.1|^0.4.0",
+        "nesbot/carbon": "^3.0|^4.0",
+        "ext-bcmath": "*"
     },
     "require-dev": {
-        "orchestra/testbench": "^9.6",
-        "phpstan/phpstan": "^1.12",
+        "filament/infolists": "^3.3",
+        "filament/support": "^3.0",
+        "filament/tables": "^3.0",
         "laravel/pint": "^1.18",
+        "orchestra/testbench": "^9.0|^10.0",
         "pestphp/pest": "^3.5",
         "pestphp/pest-plugin-mutate": "^3.0",
         "pestphp/pest-plugin-type-coverage": "^3.2",
+        "php-static-analysis/phpstan-extension": "^0.3.1|^0.4.0",
         "phpmd/phpmd": "^2.15",
-        "php-static-analysis/phpstan-extension": "^0.3.1"
+        "phpstan/phpstan": "^1.12|^2.0"
     },
     "license": "MIT",
     "autoload": {
@@ -74,5 +78,6 @@
                 "Ulid": "Pelmered\\LaravelUlid\\Ulid"
             }
         }
-    }
+    },
+    "sort-packages": true
 }

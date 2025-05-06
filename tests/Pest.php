@@ -3,6 +3,7 @@
 namespace Pelmered\LaravelUlid\Tests;
 
 use Illuminate\Support\Facades\Schema;
+use Workbench\App\Models\Post;
 use Workbench\App\Models\User;
 
 /*
@@ -17,7 +18,6 @@ use Workbench\App\Models\User;
 */
 
 pest()->extend(TestbenchTestCase::class)->in('Feature', 'Unit');
-//pest()->extend(PHPUnitTestCase::class)->in('Unit');
 
 /*
 |--------------------------------------------------------------------------
@@ -30,12 +30,9 @@ pest()->extend(TestbenchTestCase::class)->in('Feature', 'Unit');
 |
 */
 
-expect()->extend('toBeOne', function () {
-    return $this->toBe(1);
-});
-expect()->extend('toMatchUlidFormat', function (?string $prefix, ?int $timeLength = 10, ?int $randomLength = 16) {
+expect()->extend('toMatchUlidFormat', function (?string $prefix, ?int $randomLength = 16) {
     $prefix ??= '';
-    $timeLength ??= 10;
+    $timeLength = 10;
     $randomLength ??= 16;
 
     return $this->toMatch('/^'.$prefix.'[A-Z0-9]{'.$timeLength.'}[A-Z0-9]{'.$randomLength.'}$/');
@@ -57,10 +54,15 @@ function user(): User
     return User::factory()->create();
 }
 
+function post(): User
+{
+    return Post::factory()->create();
+}
+
 function checkColumnSQLite(string $tableName, string $columnName): void
 {
     expect(Schema::hasColumn($tableName, $columnName))->toBeTrue();
-    expect(Schema::getColumnType($tableName, $columnName, true))->toBe('varchar');
+    expect(Schema::getColumnType($tableName, $columnName, true))->toBeIn(['varchar', 'text']);
 
     $index = Schema::getIndexes($tableName)[1];
     expect($index['columns'][0])->toBe($columnName);

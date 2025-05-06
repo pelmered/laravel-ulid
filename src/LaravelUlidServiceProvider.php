@@ -32,6 +32,12 @@ class LaravelUlidServiceProvider extends ServiceProvider
             return $this->char($column, $length);
         });
 
+        Blueprint::macro('nullableUlidMorphs', function ($name, $indexName = null, $length = null) {
+            $this->string("{$name}_type")->nullable();
+            $this->ulid("{$name}_id", $length)->nullable();
+            $this->index(["{$name}_type", "{$name}_id"], $indexName);
+        });
+
         $this->publishes([
             __DIR__.'/../config/ulid.php' => config_path('ulid.php'),
         ]);

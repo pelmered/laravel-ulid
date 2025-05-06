@@ -1,16 +1,28 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Pelmered\LaravelUlid\Facade\Ulid;
 
 use function Pelmered\LaravelUlid\Tests\checkColumnSQLite;
 use function Pelmered\LaravelUlid\Tests\user;
 
-test('example', function () {
-    expect(true)->toBeTrue();
+beforeEach(function () {
+    // Ensure users table exists in the test database
+    if (!Schema::hasTable('users')) {
+        Schema::create('users', function ($table) {
+            $table->ulid('id', 28)->primary();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+        });
+    }
 });
 
 it('creates user with ULID', function () {
-
     $user = user();
 
     expect($user->id)->toStartWith('u_')

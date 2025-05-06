@@ -2,28 +2,36 @@
 
 namespace Pelmered\LaravelUlid\ValueObject;
 
-use lewiscowles\core\Concepts\Random\RandomnessEncoderInterface;
-use lewiscowles\core\Concepts\Time\UlidTimeEncoder;
-use lewiscowles\core\ValueTypes\PositiveNumber;
+use Carbon\Carbon;
+use DateTimeInterface;
 use Pelmered\LaravelUlid\Formatter\UlidFormatter;
+use Pelmered\LaravelUlid\UlidFactory;
 use Stringable;
 
 class Ulid implements Stringable
 {
+    const int TIME_LENGTH = 10;
+
     public function __construct(
-        protected UlidTimeEncoder $timeEncoder,
-        protected RandomnessEncoderInterface $randomEncoder,
         protected string $prefix = '',
-        protected int $timeLength = 10,
-        protected int $randomLength = 16,
+        protected string $timePart,
+        protected string $randomPart,
     ) {}
+
+    public static function make(
+        Carbon|DateTimeInterface|int|null $time = null,
+        string $prefix = '',
+        int $randomLength = 16,
+    ): self {
+        return (new UlidFactory)->generateMonotonicUlid($time, $prefix, $randomLength);
+    }
 
     public function format(): string
     {
         return app(UlidFormatter::class)->format(
             $this->prefix,
-            $this->timeEncoder->encode(new PositiveNumber($this->timeLength)),
-            $this->randomEncoder->encode(new PositiveNumber($this->randomLength))
+            $this->timePart,
+            $this->randomPart,
         );
     }
 

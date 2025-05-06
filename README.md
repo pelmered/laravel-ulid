@@ -136,7 +136,6 @@ Publish the config file `config/ulid.php` to your project.
 php artisan vendor:publish --tag=ulid-config
 ```
 
-
 ## Running tests
 
 Run the test with `vendor/bin/pest` or `composer test`.

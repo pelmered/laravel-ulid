@@ -8,8 +8,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUniqueStringIds;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Pelmered\LaravelUlid\UlidService;
-
-//use Pelmered\LaravelUlid\Facade\Ulid;
+use Pelmered\LaravelUlid\ValueObject\Ulid;
 
 trait HasUlid
 {
@@ -94,15 +93,6 @@ trait HasUlid
         return static::idColumn();
     }
 
-    public function getUlidTimeLength(): int
-    {
-        if (property_exists($this, 'ulidTimeLength')) {
-            return (int) $this->ulidTimeLength;
-        }
-
-        return config('ulid.time_length', UlidService::DEFAULT_TIME_LENGTH);
-    }
-
     public function getUlidRandomLength(): int
     {
         if (property_exists($this, 'ulidRandomLength')) {
@@ -114,7 +104,7 @@ trait HasUlid
 
     public function getUlidLength(): int
     {
-        return strlen($this->getUlidPrefix()) + $this->getUlidTimeLength() + $this->getUlidRandomLength();
+        return strlen($this->getUlidPrefix()) + Ulid::TIME_LENGTH + $this->getUlidRandomLength();
     }
 
     public function getUlidFormattingOptions(): array

@@ -11,7 +11,10 @@ it('macro exists on blueprint', function () {
     expect(Blueprint::hasMacro('modelUlid'))->toBeTrue();
 });
 
-it('macro returns correct ulid column on SQLite', function () {
+it(' returns correct ulid column on SQLite', function () {
+    // Drop the table first if it exists (to avoid errors)
+    Schema::dropIfExists('test');
+
     Schema::create('test', function (Blueprint $table) {
         $col = $table->modelUlid('id', User::class)->primary();
 
@@ -25,12 +28,22 @@ it('macro returns correct ulid column on SQLite', function () {
     checkColumnSQLite('test', 'id');
 });
 
-it('macro returns correct ulid column on MySQL', function () {
+it('returns correct ulid column on MySQL', function () {
 
     $this->usesMySqlConnection(app());
+
+    // Skip if MySQL connection isn't available
+    try {
+        $connection = app('db')->connection('mysql');
+        $connection->getPdo();
+    } catch (\Exception $e) {
+        $this->markTestSkipped('MySQL connection is not available. Set up MySQL in the .env file to run this test.');
+        return;
+    }
+
     Schema::dropIfExists('test');
 
-    Schema::create('test', function (Blueprint $table) {
+    Schema::create('test', static function (Blueprint $table) {
         $col = $table->modelUlid('id', User::class)->primary();
 
         expect($col)->toBeInstanceOf(Illuminate\Database\Schema\ColumnDefinition::class);

@@ -7,18 +7,17 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\Attributes\WithMigration;
-use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase;
 use Pelmered\LaravelUlid\LaravelUlidServiceProvider;
 use PhpStaticAnalysis\Attributes\Param;
 use PhpStaticAnalysis\Attributes\Returns;
 use Workbench\App\Providers\CustomFormatterServiceProvider;
+use function Orchestra\Testbench\workbench_path;
 
 #[WithMigration]
 class TestbenchTestCase extends TestCase
 {
     use RefreshDatabase;
-    use WithWorkbench;
 
     protected function getPackageProviders($app): array
     {
@@ -26,6 +25,13 @@ class TestbenchTestCase extends TestCase
             LaravelUlidServiceProvider::class,
             CustomFormatterServiceProvider::class,
         ];
+    }
+
+    protected function defineDatabaseMigrations()
+    {
+        $this->loadMigrationsFrom(
+            workbench_path('database/migrations')
+        );
     }
 
     protected function usesMySqlConnection($app): void
@@ -41,7 +47,6 @@ class TestbenchTestCase extends TestCase
                 'password' => config('database.connections.mysql.password', null),
                 'prefix' => '',
             ]);
-
         });
     }
 
@@ -52,7 +57,7 @@ class TestbenchTestCase extends TestCase
 
     #[Param(app: Application::class)]
     #[Returns('void')]
-    protected function defineEnvironment($app)
+    protected function defineEnvironment($app): void
     {
         // make sure, our .env file is loaded
         $app->useEnvironmentPath(__DIR__.'/..');
@@ -66,15 +71,18 @@ class TestbenchTestCase extends TestCase
                 'driver' => 'sqlite',
                 'database' => ':memory:',
                 'prefix' => '',
+                'foreign_key_constraints' => true,
             ]);
+        });
+    }
 
-            // Setup queue database connections.
-            /*
-            $config([
-                'queue.batching.database' => 'testbench',
-                'queue.failed.database' => 'testbench',
-            ]);
-            */
+    /**
+     * Set up the custom ULID formatter
+     */
+    protected function setupFormatter(): void
+    {
+        app('ulid')->formatUlidsUsing(function (string $prefix, string $time, string $random): string {
+            return $prefix . $time . $random;
         });
     }
 }
