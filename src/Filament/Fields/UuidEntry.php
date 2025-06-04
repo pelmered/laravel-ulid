@@ -1,4 +1,5 @@
 <?php
+
 namespace Pelmered\LaravelUlid\Filament\Fields;
 
 use Filament\Infolists\Components\TextEntry;

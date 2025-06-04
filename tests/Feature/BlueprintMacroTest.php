@@ -38,6 +38,7 @@ it('returns correct ulid column on MySQL', function () {
         $connection->getPdo();
     } catch (\Exception $e) {
         $this->markTestSkipped('MySQL connection is not available. Set up MySQL in the .env file to run this test.');
+
         return;
     }
 

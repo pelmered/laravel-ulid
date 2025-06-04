@@ -15,8 +15,6 @@ readonly class StaticTimeSource implements TimeSourceInterface
             return $this->timestamp;
         }
 
-        return (int) Carbon::instance($this->timestamp)->getPreciseTimestamp(3);
-        // This needs PHP 8.4
-        //return $this->timestamp->getMicrosecond();
+        return $this->timestamp->getMicrosecond();
     }
 }

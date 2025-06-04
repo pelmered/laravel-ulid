@@ -10,9 +10,10 @@ use Pelmered\LaravelUlid\Contracts\Ulidable;
 
 class Post extends Model implements Ulidable
 {
-    use HasFactory, HasUlid, Notifiable;
     /** @use HasFactory<\Database\Factories\PostFactory> */
     use HasFactory;
+
+    use HasFactory, HasUlid, Notifiable;
 
     protected string $ulidPrefix = 'p_';
 

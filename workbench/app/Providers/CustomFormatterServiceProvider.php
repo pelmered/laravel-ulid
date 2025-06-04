@@ -20,6 +20,6 @@ class CustomFormatterServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
-        //Ulid::setFormatter(new \Workbench\UlidFormatter());
+        // Ulid::setFormatter(new \Workbench\UlidFormatter());
     }
 }

@@ -13,7 +13,7 @@ class Ulid implements Stringable
     const int TIME_LENGTH = 10;
 
     public function __construct(
-        protected string $prefix = '',
+        protected string $prefix,
         protected string $timePart,
         protected string $randomPart,
     ) {}
