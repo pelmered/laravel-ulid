@@ -2,7 +2,6 @@
 
 namespace Workbench\App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -19,7 +18,7 @@ class User extends Authenticatable implements Ulidable
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'id',
@@ -31,7 +30,7 @@ class User extends Authenticatable implements Ulidable
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $hidden = [
         'password',
@@ -41,7 +40,7 @@ class User extends Authenticatable implements Ulidable
     /**
      * The attributes that should be cast.
      *
-     * @var array<string, string>
+     * @var list<string>
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
