@@ -17,7 +17,6 @@ it('formats', function (?string $prefix, ?int $randomLength) {
     dd($f);
     */
 
-
     $ulid = Ulid::make(Carbon::now(), $prefix, $randomLength);
 
     expect($ulid)->toBeString();

@@ -1,12 +1,12 @@
 <?php
 
 use Carbon\Carbon;
-use Pelmered\LaravelUlid\UlidService;
 use Pelmered\LaravelUlid\Contracts\Ulidable;
+use Pelmered\LaravelUlid\UlidService;
 use Pelmered\LaravelUlid\ValueObject\Ulid;
 
 beforeEach(function () {
-    $this->ulidService = new UlidService();
+    $this->ulidService = new UlidService;
 });
 
 it('generates ulid with default parameters', function () {
@@ -52,8 +52,8 @@ it('validates ulid format correctly', function () {
     $mockModel->shouldReceive('getUlidPrefix')->andReturn('test_');
     $mockModel->shouldReceive('getUlidLength')->andReturn(31);
 
-    $validUlid = 'test_' . str_repeat('a', 26);
-    $invalidUlid = 'test_' . str_repeat('!', 22);
+    $validUlid = 'test_'.str_repeat('a', 26);
+    $invalidUlid = 'test_'.str_repeat('!', 22);
 
     expect(UlidService::isValidUlid($validUlid, $mockModel))->toBeTrue()
         ->and(UlidService::isValidUlid($invalidUlid, $mockModel))->toBeFalse();
@@ -80,46 +80,46 @@ it('checks if ulid is valid', function ($params, $valid) {
 })->with([
     'valid' => [
         [
-            'ulid' =>  str_repeat('a', 26),
+            'ulid' => str_repeat('a', 26),
             'model' => null,
             'prefix' => null,
         ],
-        true
+        true,
     ],
     'valid with prefix' => [
         [
-            'ulid' => 'test_' . str_repeat('a', 26),
+            'ulid' => 'test_'.str_repeat('a', 26),
             'model' => null,
             'prefix' => 'test_',
         ],
-        true
+        true,
     ],
     'valid with a model' => [
         [
-            'ulid' => 'u_' . str_repeat('a', 26),
-            'model' => new \Workbench\App\Models\User(),
+            'ulid' => 'u_'.str_repeat('a', 26),
+            'model' => new \Workbench\App\Models\User,
         ],
-        true
+        true,
     ],
     'too long with a model' => [
         [
-            'ulid' => 'u_' . str_repeat('a', 27),
-            'model' => new \Workbench\App\Models\User(),
+            'ulid' => 'u_'.str_repeat('a', 27),
+            'model' => new \Workbench\App\Models\User,
         ],
-        false
+        false,
     ],
     'too short with a model' => [
         [
-            'ulid' => 'u_' . str_repeat('a', 25),
-            'model' => new \Workbench\App\Models\User(),
+            'ulid' => 'u_'.str_repeat('a', 25),
+            'model' => new \Workbench\App\Models\User,
         ],
-        false
+        false,
     ],
     [
         [
-            'ulid' => 'test_' . str_repeat('a', 26),
-            'model' => null
+            'ulid' => 'test_'.str_repeat('a', 26),
+            'model' => null,
         ],
-        false
+        false,
     ],
 ]);

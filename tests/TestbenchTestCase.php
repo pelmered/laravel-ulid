@@ -12,6 +12,7 @@ use Pelmered\LaravelUlid\LaravelUlidServiceProvider;
 use PhpStaticAnalysis\Attributes\Param;
 use PhpStaticAnalysis\Attributes\Returns;
 use Workbench\App\Providers\CustomFormatterServiceProvider;
+
 use function Orchestra\Testbench\workbench_path;
 
 #[WithMigration]
@@ -82,7 +83,7 @@ class TestbenchTestCase extends TestCase
     protected function setupFormatter(): void
     {
         app('ulid')->formatUlidsUsing(function (string $prefix, string $time, string $random): string {
-            return $prefix . $time . $random;
+            return $prefix.$time.$random;
         });
     }
 }

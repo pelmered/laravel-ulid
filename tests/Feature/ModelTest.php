@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Pelmered\LaravelUlid\Facade\Ulid;
 
@@ -9,7 +8,7 @@ use function Pelmered\LaravelUlid\Tests\user;
 
 beforeEach(function () {
     // Ensure users table exists in the test database
-    if (!Schema::hasTable('users')) {
+    if (! Schema::hasTable('users')) {
         Schema::create('users', function ($table) {
             $table->ulid('id', 28)->primary();
             $table->string('name');

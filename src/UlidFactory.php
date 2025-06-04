@@ -1,4 +1,5 @@
 <?php
+
 namespace Pelmered\LaravelUlid;
 
 use Carbon\Carbon;
@@ -14,7 +15,7 @@ class UlidFactory
         Carbon|\DateTimeInterface|int|null $time = null,
         string $prefix = '',
         int $randomLength = 16,
-        string $lastRandom = null
+        ?string $lastRandom = null
     ): Ulid {
         $time = $this->parseTime($time);
         $timePart = $this->base32Encode($time, Ulid::TIME_LENGTH);
@@ -34,18 +35,15 @@ class UlidFactory
 
     public function parseTime($time): int
     {
-        if (is_int($time))
-        {
+        if (is_int($time)) {
             return $time;
         }
 
-        if ($time instanceof Carbon)
-        {
+        if ($time instanceof Carbon) {
             return $time->getPreciseTimestamp(3);
         }
 
-        if ($time instanceof \DateTimeInterface)
-        {
+        if ($time instanceof \DateTimeInterface) {
             return (int) Carbon::instance($time)->getPreciseTimestamp(3);
         }
 
@@ -60,7 +58,7 @@ class UlidFactory
         do {
             $number = number_format($number, 0, '.', '');
             $remainder = (int) bcmod($number, 32);
-            $base32 = self::ALPHABET[$remainder] . $base32;
+            $base32 = self::ALPHABET[$remainder].$base32;
             $number = bcdiv(bcsub($number, $remainder), 32);
         } while ($number > 0);
 
@@ -73,6 +71,7 @@ class UlidFactory
         for ($i = 0; $i < $length; $i++) {
             $random .= self::ALPHABET[random_int(0, 31)];
         }
+
         return $random;
     }
 
@@ -80,6 +79,7 @@ class UlidFactory
     {
         $value = $this->base32Decode($lastRandom);
         $value++;
+
         return $this->base32Encode($value, $length);
     }
 
@@ -91,6 +91,7 @@ class UlidFactory
         for ($i = 0; $i < $strLength; $i++) {
             $number = $number * 32 + strpos(self::ALPHABET, $base32[$i]);
         }
+
         return $number;
     }
 }

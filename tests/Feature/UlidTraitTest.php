@@ -5,8 +5,6 @@ namespace Tests\Feature;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Pelmered\LaravelUlid\Concerns\HasUlid;
-use Pelmered\LaravelUlid\Contracts\Ulidable;
 use Pelmered\LaravelUlid\Facade\Ulid;
 use Workbench\App\Models\Post;
 use Workbench\App\Models\User;
@@ -17,7 +15,7 @@ use function Pelmered\LaravelUlid\Tests\user;
 
 beforeEach(function () {
     // Ensure tables exist in the test database
-    if (!Schema::hasTable('users')) {
+    if (! Schema::hasTable('users')) {
         Schema::create('users', function ($table) {
             $table->string('id', 28)->primary();
             $table->string('name');
@@ -29,7 +27,7 @@ beforeEach(function () {
         });
     }
 
-    if (!Schema::hasTable('posts')) {
+    if (! Schema::hasTable('posts')) {
         Schema::create('posts', function ($table) {
             $table->string('id', 28)->primary();
             $table->string('title');
@@ -38,7 +36,7 @@ beforeEach(function () {
         });
     }
 
-    if (!Schema::hasTable('test_models')) {
+    if (! Schema::hasTable('test_models')) {
         Schema::create('test_models', function ($table) {
             $table->string('id', 36)->primary();
             $table->string('name')->nullable();
@@ -49,7 +47,7 @@ beforeEach(function () {
 
 it('automatically generates ulid on model creation', function () {
     // Create the user directly with SQL to avoid model event issues
-    $id = 'u_' . strtoupper(substr(md5(time()), 0, 10) . substr(md5('test-auto@example.com'), 0, 16));
+    $id = 'u_'.strtoupper(substr(md5(time()), 0, 10).substr(md5('test-auto@example.com'), 0, 16));
     $name = 'Auto Test User';
     $email = 'test-auto@example.com';
     $now = now()->format('Y-m-d H:i:s');
@@ -76,7 +74,7 @@ it('automatically generates ulid on model creation', function () {
 
 it('generates ulid with custom prefix', function () {
     // Create the post directly with SQL to avoid model event issues
-    $id = 'p_' . strtoupper(substr(md5(time()), 0, 10) . substr(md5('test-post-title'), 0, 12));
+    $id = 'p_'.strtoupper(substr(md5(time()), 0, 10).substr(md5('test-post-title'), 0, 12));
     $title = 'Test Post Title';
     $body = 'Test post body content';
     $now = now()->format('Y-m-d H:i:s');
@@ -100,7 +98,7 @@ it('generates ulid with custom prefix', function () {
 
 it('generates ulid with custom length', function () {
     // Create the post directly with SQL to avoid model event issues
-    $id = 'p_' . strtoupper(substr(md5(time()), 0, 10) . substr(md5('custom-length-post'), 0, 12));
+    $id = 'p_'.strtoupper(substr(md5(time()), 0, 10).substr(md5('custom-length-post'), 0, 12));
     $title = 'Custom Length Post';
     $body = 'This post has a custom ULID length';
     $now = now()->format('Y-m-d H:i:s');
@@ -122,7 +120,7 @@ it('generates ulid with custom length', function () {
 
 it('finds model by ulid', function () {
     // Create the user directly with SQL to avoid model event issues
-    $id = 'u_' . strtoupper(substr(md5(time()), 0, 10) . substr(md5('find-test@example.com'), 0, 16));
+    $id = 'u_'.strtoupper(substr(md5(time()), 0, 10).substr(md5('find-test@example.com'), 0, 16));
     $name = 'Find Test User';
     $email = 'find-test@example.com';
     $now = now()->format('Y-m-d H:i:s');

@@ -4,18 +4,15 @@ namespace Pelmered\LaravelUlid;
 
 use Carbon\Carbon;
 use Illuminate\Support\Str;
-use lewiscowles\core\Concepts\Random\UlidRandomnessEncoder;
-use lewiscowles\core\Concepts\Time\UlidTimeEncoder;
 use Pelmered\LaravelUlid\Contracts\Ulidable;
 use Pelmered\LaravelUlid\Formatter\UlidFormatter;
-use Pelmered\LaravelUlid\Time\StaticTimeSource;
 use Pelmered\LaravelUlid\ValueObject\Ulid;
 
 class UlidService
 {
     public const int DEFAULT_RANDOM_LENGTH = 16;
 
-    public function make(?Carbon $createdAt = null, ?string $prefix = '',  ?int $randomLength = null): string
+    public function make(?Carbon $createdAt = null, ?string $prefix = '', ?int $randomLength = null): string
     {
         $prefix ??= '';
         $createdAt ??= Carbon::now();
@@ -30,16 +27,16 @@ class UlidService
 
     public static function fromModel(Ulidable $model): Ulid
     {
-        return (new UlidFactory())->generateMonotonicUlid(
+        return (new UlidFactory)->generateMonotonicUlid(
             $model->getCreatedAt(),
             $model->getUlidPrefix(),
             $model->getUlidRandomLength(),
         );
     }
 
-    public static function isValidUlid(string $ulid, ?Ulidable $model = null, string $prefix = null): bool
+    public static function isValidUlid(string $ulid, ?Ulidable $model = null, ?string $prefix = null): bool
     {
-        if($model) {
+        if ($model) {
             $prefix = $prefix ?? $model->getUlidPrefix();
             if ($prefix && ! Str::startsWith($ulid, $prefix)) {
                 // dump('prefix', $ulid);
@@ -73,8 +70,7 @@ class UlidService
     /**
      * Set a custom formatter for ULIDs
      *
-     * @param callable $formatter The formatter function
-     * @return void
+     * @param  callable  $formatter  The formatter function
      */
     public function formatUlidsUsing(callable $formatter): void
     {
@@ -83,8 +79,6 @@ class UlidService
 
     /**
      * Get the custom formatter if one is set
-     *
-     * @return \Closure|null
      */
     public function getCustomFormatter(): ?\Closure
     {
