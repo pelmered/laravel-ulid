@@ -5,11 +5,16 @@ namespace Pelmered\LaravelUlid\Concerns;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Concerns\HasUniqueStringIds;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Pelmered\LaravelUlid\Contracts\Ulidable;
 use Pelmered\LaravelUlid\UlidService;
 use Pelmered\LaravelUlid\ValueObject\Ulid;
 
+/**
+ * @phpstan-require-extends Model
+ * @phpstan-require-implements Ulidable
+ */
 trait HasUlid
 {
     use HasUniqueStringIds;
@@ -22,44 +27,6 @@ trait HasUlid
     protected function isValidUniqueId($ulid): bool
     {
         return UlidService::isValidUlid($ulid, $this);
-    }
-
-    public static function find(string|Arrayable|array $value, array|string $columns = ['*']): ?self
-    {
-        if ($value instanceof static) {
-            return $value->refresh();
-        }
-
-        if (is_array($value) || $value instanceof Arrayable) {
-            return static::findMany($value, $columns);
-        }
-
-        return static::findByUlid($value, $columns);
-    }
-
-    public static function findById(string $id, array|string $columns = ['*'], bool $withTrashed = false): ?self
-    {
-        return static::findByUlid($id, $columns, $withTrashed);
-    }
-
-    public static function findByUlid(string $id, array|string $columns = ['*'], bool $withTrashed = false): ?self
-    {
-        return Cache::remember(
-            implode('_', [
-                self::getTableName(),
-                $id,
-                ...$columns,
-                $withTrashed ? 'withTrashed' : '',
-            ]),
-            60,
-            static function () use ($withTrashed, $id, $columns) {
-                return self::where(static::idColumn(), '=', $id)
-                    ->when($withTrashed, function ($query) {
-                        return $query->withTrashed();
-                    })
-                    ->first($columns);
-            }
-        );
     }
 
     public function getUlidPrefix(): string
