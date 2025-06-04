@@ -31,7 +31,7 @@ class UlidService
     public static function fromModel(Ulidable $model): Ulid
     {
         return (new UlidFactory())->generateMonotonicUlid(
-            $model->getCreatedAt()->getPreciseTimestamp(3),
+            $model->getCreatedAt(),
             $model->getUlidPrefix(),
             $model->getUlidRandomLength(),
         );
