@@ -2,7 +2,6 @@
 
 namespace Pelmered\LaravelUlid\Time;
 
-use Carbon\Carbon;
 use lewiscowles\core\Concepts\Time\TimeSourceInterface;
 
 readonly class StaticTimeSource implements TimeSourceInterface

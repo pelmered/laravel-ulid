@@ -3,7 +3,6 @@
 namespace Pelmered\LaravelUlid\Concerns;
 
 use Carbon\Carbon;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Concerns\HasUniqueStringIds;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -13,6 +12,7 @@ use Pelmered\LaravelUlid\ValueObject\Ulid;
 
 /**
  * @phpstan-require-extends Model
+ *
  * @phpstan-require-implements Ulidable
  */
 trait HasUlid

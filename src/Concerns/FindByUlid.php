@@ -1,4 +1,5 @@
 <?php
+
 namespace Pelmered\LaravelUlid\Concerns;
 
 use Illuminate\Contracts\Support\Arrayable;
@@ -8,6 +9,7 @@ use Pelmered\LaravelUlid\Contracts\Ulidable;
 
 /**
  * @phpstan-require-extends Model
+ *
  * @phpstan-require-implements Ulidable
  *
  * @method static findMany(array|Arrayable $value, array|string|string[] $columns)
@@ -48,10 +50,10 @@ trait FindByUlid
             60,
             static function () use ($withTrashed, $id, $columns) {
                 return self::where(static::idColumn(), '=', $id)
-                           ->when($withTrashed, function ($query) {
-                               return $query->withTrashed();
-                           })
-                           ->first($columns);
+                    ->when($withTrashed, function ($query) {
+                        return $query->withTrashed();
+                    })
+                    ->first($columns);
             }
         );
     }

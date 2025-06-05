@@ -2,7 +2,6 @@
 
 namespace Pelmered\LaravelUlid\Time;
 
-use Illuminate\Database\Eloquent\Model;
 use lewiscowles\core\Concepts\Time\TimeSourceInterface;
 use Pelmered\LaravelUlid\Contracts\Ulidable;
 
