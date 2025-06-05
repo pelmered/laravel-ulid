@@ -33,7 +33,7 @@ The hyphens also look pretty ugly and do not have any real meaning for a human.
 [![OtterWise Coverage](https://img.shields.io/endpoint?url=https://otterwise.app/badge/github/pelmered/laravel-ulid)](https://otterwise.app/github/pelmered/laravel-ulid)
 [![OtterWise Type Coverage](https://img.shields.io/endpoint?url=https://otterwise.app/badge/github/pelmered/laravel-ulid/type)](https://otterwise.app/github/pelmered/laravel-ulid)
 
-[![Tested on PHP 8.3 to 8.4](https://img.shields.io/badge/Tested%20on%20PHP-8.3%20|%208.4-brightgreen.svg?maxAge=2419200)](https://github.com/pelmered/filament-money-field/actions/workflows/tests.yml)
+[![Tested on PHP 8.4](https://img.shields.io/badge/Tested%20on%20PHP-8.3%20|%208.4-brightgreen.svg?maxAge=2419200)](https://github.com/pelmered/filament-money-field/actions/workflows/tests.yml)
 [![Tested on OS:es Linux, MacOS, Windows](https://img.shields.io/badge/Tested%20on%20lastest%20versions%20of-%20Ubuntu%20|%20MacOS%20|%20Windows-brightgreen.svg?maxAge=2419200)](https://github.com/pelmered/laravel-ulid/actions/workflows/tests.yml)
 
 ## TODO
