@@ -5,13 +5,14 @@ namespace Workbench\App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Pelmered\LaravelUlid\Concerns\FindByUlid;
 use Pelmered\LaravelUlid\Concerns\HasUlid;
 use Pelmered\LaravelUlid\Contracts\Ulidable;
 use Workbench\Database\Factories\UserFactory;
 
 class User extends Authenticatable implements Ulidable
 {
-    use HasFactory, HasUlid, Notifiable;
+    use FindByUlid, HasFactory, HasUlid, Notifiable;
 
     protected string $ulidPrefix = 'u_';
 
