@@ -19,8 +19,6 @@ trait HasUlid
 {
     use HasUniqueStringIds;
 
-    protected $primaryKey = 'id';
-
     public function newUniqueId(): string
     {
         return (string) UlidService::fromModel($this);
