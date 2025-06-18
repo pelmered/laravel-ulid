@@ -19,6 +19,8 @@ trait HasUlid
 {
     use HasUniqueStringIds;
 
+    protected $primaryKey = 'id';
+
     public function newUniqueId(): string
     {
         return (string) UlidService::fromModel($this);
@@ -45,19 +47,6 @@ trait HasUlid
     public static function getTableName(): string
     {
         return (new static)->getTable();
-    }
-
-    /**
-     * The name of the column that should be used for the ULID.
-     */
-    public static function idColumn(): string
-    {
-        return (new static)->primaryKey ?? 'id';
-    }
-
-    public function getKeyName(): string
-    {
-        return static::idColumn();
     }
 
     public function getUlidRandomLength(): int
