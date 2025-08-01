@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class UlidColumn extends TextColumn
 {
-    public static function make(string $name = 'id'): static
+    public static function make(?string $name = 'id'): static
     {
         $static = parent::make($name);
 
