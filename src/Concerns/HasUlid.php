@@ -61,6 +61,10 @@ trait HasUlid
         return strlen($this->getUlidPrefix()) + Ulid::TIME_LENGTH + $this->getUlidRandomLength();
     }
 
+    public static function ulidLength():int
+    {
+        return (new static)->getUlidLength();
+    }
     public function getUlidFormattingOptions(): array
     {
         return [];
